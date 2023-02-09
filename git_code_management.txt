@@ -1,0 +1,15 @@
+laptop_ origin2 
+
+ls -> 현대 폴더의 파일 확인
+
+cd -> 파일 이동
+
+git status -> 현재 git 상태 확인
+
+git log --oneline -> git 로그기록 확인
+
+git reset c6109fa -> 원하는 로그로 리셋해라
+
+git remote -v git 관리 버전 확인
+
+git push --force 강제 푸쉬 -> commit history 날라가지 않음
