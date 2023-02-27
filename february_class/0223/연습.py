@@ -1,4 +1,5 @@
-a = [1,2,3,4,5]
-a.insert(1,8)
+a=['1','2','3','4','5']
+print(''.join(a))
 
-print(a)
+for i in range(5, 4, -1):
+    print('error')
