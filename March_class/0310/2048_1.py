@@ -1,5 +1,9 @@
 '''
 move 함수 만들기
+# 튜플을 리스트로 바꾸는 법
+my_list = [list(x) for x in my_list]
+#print(my_list)
+a = list(map(list, my_list))
 
 dfs 함수 시작
 
@@ -11,6 +15,7 @@ dfs 함수 시작
         continue
 
 2. 다했으면 mx 갱신
+
 '''
 
 import sys
@@ -28,18 +33,25 @@ def mx(mx1):
                 mx1 = arr[ni][nj]
 
 #move 함수 구현 완료
-def move_right(arr):
+def move_right(arr, N1):
+
+    if N1 == 5:
+        mx(mx1)
+        ans.append(mx1)
+        return
+    N1 += 1
+
     cnt = 0
     # 오른쪽 진행
     for i in range(N):
         j = N-1; v=[]
         while j > -1:
-            if 0<= j-1 <N and arr[i][j] == arr[i][j-1]:
+            if 1<= j-1 <N and arr[i][j] == arr[i][j-1] and arr[i][j]:
                 num = arr[i][j] + arr[i][j-1]
                 arr[i][j] = 0
                 arr[i][j - 1] = 0
                 v.append(num)
-                cnt+=1
+                cnt += 1
                 j -= 2
 
             else:
@@ -56,23 +68,32 @@ def move_right(arr):
             for nj in range(len(arr_t)):
                 arr[i][nj] = arr_t[nj]
 
+
     # 종료조건
     if cnt == 0:
         return
 
     else:
+        recursion(N1+1)
+
+    return
+
+def move_left(arr, N1):
+    if N1 == 5:
         mx(mx1)
         ans.append(mx1)
-        recursion()
+        return
+    N1 += 1
 
-def move_left(arr):
     # 왼쪽 진행
-    global cnt
     cnt = 0
     for i in range(N):
         j = 0; v=[]
+
         while j < N:
-            if 0 <= j+1 < N and arr[i][j] == arr[i][j+1]:
+            d = cnt
+            if 1 <= j+1 < N and arr[i][j] == arr[i][j+1] and arr[i][j]:
+
                 num = arr[i][j] + arr[i][j+1]
                 arr[i][j] = 0
                 arr[i][j + 1] = 0
@@ -80,10 +101,10 @@ def move_left(arr):
                 j += 2
                 cnt += 1
 
-
             else:
                 v.append(arr[i][j])
                 j += 1
+
 
         # while 문이 끝나면
         arr_t = [0]*N
@@ -96,23 +117,31 @@ def move_left(arr):
             arr[i][nj] = arr_t[nj]
 
     # 종료조건
-    if cnt != 0:
-        mx(mx1)
-        ans.append(mx1)
-        recursion()
+    if cnt:
+        recursion(N1+1)
 
     else: #cnt 가 0 이면,
         return
 
-def move_top(arr):
+    return
+
+def move_top(arr, N1):
+
+    if N1 == 5:
+        mx(mx1)
+        ans.append(mx1)
+        return
+    N1 += 1
+
     cnt = 0
     # 위쪽 진행
     arr_v = list(map(list, list(zip(*arr))))
-    for i in range(N):
-        j = 0; v=[]; cnt = 0
-        while j < N:
 
-            if 0<=j+1<N and arr_v[i][j] == arr_v[i][j+1]:
+    for i in range(N):
+        j = 0; v=[]
+
+        while j < N:
+            if 0 <= j+1 < N and arr_v[i][j] == arr_v[i][j+1] and arr_v[i][j]:
                 num = arr_v[i][j] + arr_v[i][j+1]
                 arr_v[i][j] = 0
                 arr_v[i][j + 1] = 0
@@ -139,11 +168,17 @@ def move_top(arr):
         return
 
     else:
+        recursion(N1+1)
+
+    return
+def move_bottom(arr, N1):
+
+    if N1 == 5:
         mx(mx1)
         ans.append(mx1)
-        recursion()
+        return
+    N1 += 1
 
-def move_bottom(arr):
     cnt = 0
     # 아래쪽 진행
     arr_v = list(map(list, list(zip(*arr))))
@@ -178,27 +213,24 @@ def move_bottom(arr):
         return
 
     else:
-        mx(mx1)
-        ans.append(mx1)
-        recursion()
+        recursion(N1+1)
+
+    return
 
 # 문제가 지금 -> 바꾼 거를 입력하지 않음
-
-
-
 
 #움직이지 않으면 X라는 것을 구현 못했음
 
 # 재귀 함수 구현
 cnt = 0
-def recursion():
-    move_left(arr)
-    move_top(arr)
-    move_bottom(arr)
-    move_right(arr)
+def recursion(N):
+    move_left(arr,N)
+    move_top(arr,N)
+    move_bottom(arr,N)
+    move_right(arr, N)
 
 
-recursion()
-print(max(ans))
+recursion(0)
+print(ans)
 
 
