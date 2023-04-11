@@ -9,29 +9,34 @@
 <body>
 <div id = "nav">
   <h1>Notice-board</h1>
-  <h3>hello, {{user}}</h3>
   {% if user.is_authenticated %}
-  <h1>AUTH!!!!</h1>
-  <form action="{% url 'accounts:logout' %}" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="Logout">
-  </form>
+  <h3>hello, {{user}}</h3>
+  <div>
+    <form action="{% url 'accounts:logout' %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="Logout">
+    </form>
+    <form action="{% url 'accounts:delete' %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="회원탈퇴">
+    </form>
+    <a href="{% url 'accounts:update' %}">update</a>
+  </div>
   {% else %}
   {% comment %} <a href="{% url 'accounts:signup' %}">sign up</a> {% endcomment %}
   <a href="{% url 'accounts:login' %}"> log in </a>
+  <a href="{% url 'accounts:signup' %}">sign up</a>
   {% endif %}
 </div>
 <hr>
 <br>
-
   <div class="content">
     {% block content %}
-    {% comment %} 1.  회원가입, user님 안녕하세요, 넣어야 함 {% endcomment %}
-    {% comment %} 2. 게시판 생성 넣어야 함, 대신 로그인 했을 때 나올 수 있도록 해야 함 {% endcomment %}
     {% endblock content %}
   </div>
 
-  
+
+
 </body>
 
 </html>
