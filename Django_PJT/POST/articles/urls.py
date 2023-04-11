@@ -7,4 +7,5 @@ urlpatterns = [
     path('hello/', views.hello, name='hello'),
     path('catch/', views.catch, name='catch'),
     path('throw/', views.throw, name='throw'),
+    path('create/', views.create, name='create'),
 ]

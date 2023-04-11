@@ -2,8 +2,20 @@
 {% block content %}
 <h1>INDEX</h1>
 <hr>
-<a href="{% url 'articles:hello' %}">hello</a>
 
+<form action="{% url 'articles:create' %}">
+<input type="submit" value="Post_create">
+</form>
+
+{% for article in articles %}
+<p>글 번호: {{article.pk}}</p>
+<p>글 제목: {{article.title}}</p>
+<p>글 내용: {{article.content}}</p>
+
+{% endfor %}
+
+
+<a href="{% url 'articles:hello' %}">hello</a>
 <a href="{% url 'articles:catch' %}">catch</a>
 {% endblock content %}
 
