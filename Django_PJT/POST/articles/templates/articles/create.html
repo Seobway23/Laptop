@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% csrf_token %}
-{{form.as_p}}
-
+<h1>Create Post</h1>
+<form action="{% url 'articles:create' %}" method="POST" enctype="multipart/form-data">
+  {% csrf_token %} {{form.as_p}}
+  <input type="submit" value="Create">
+</form>
+<a href="{% url 'articles:index' %}">back</a>
 {% endblock content %}

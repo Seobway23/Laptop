@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if article.image %}
+  <img src="article.image.url" alt="{{article.image}}">
+  {% endif %}
+<h2>DETAIL</h2>
+<p>글 번호: {{article.pk}}</p>
+<p>글 제목: {{article.title}}</p>
+<p>글 내용: {{article.content}}</p>
+
+{% comment %} <a href="{% url 'articles:update' %}"> update</a> {% endcomment %}
+
+<form action="{% url 'articles:delete' article.pk %}" method="POST">
+  {% csrf_token %}
+  <input type="submit" value="DELETE">
+</form>
+
+<a href="{% url 'articles:update' article.pk %}">update</a>
+
+<a href="{% url 'articles:index' %}" method="GET">back</a>
+
+{% endblock content %}

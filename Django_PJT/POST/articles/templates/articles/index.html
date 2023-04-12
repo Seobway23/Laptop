@@ -8,14 +8,17 @@
 </form>
 
 {% for article in articles %}
-<p>글 번호: {{article.pk}}</p>
+<br>
+<a href="{% url 'articles:detail'  article.pk%}"><p>글 번호: {{article.pk}}</p></a>
 <p>글 제목: {{article.title}}</p>
 <p>글 내용: {{article.content}}</p>
-
+<p>작성 시각: {{article.created_at}}</p>
+<p>수정 시각: {{article.updated_at}}</p>
+<br>
+</div>
+</div>
 {% endfor %}
 
 
-<a href="{% url 'articles:hello' %}">hello</a>
-<a href="{% url 'articles:catch' %}">catch</a>
 {% endblock content %}
 
