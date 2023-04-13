@@ -9,14 +9,32 @@
 
 {% for article in articles %}
 <br>
-<a href="{% url 'articles:detail'  article.pk%}"><p>글 번호: {{article.pk}}</p></a>
+<p>
+  <b>작성자 : <a href="{% url 'accounts:profile' article.user.username %}">{{article.user}}</a></b>
+</p>
+<p>글 번호: {{article.pk}}</p>
 <p>글 제목: {{article.title}}</p>
 <p>글 내용: {{article.content}}</p>
 <p>작성 시각: {{article.created_at}}</p>
 <p>수정 시각: {{article.updated_at}}</p>
 <br>
+
+<div>
+  <form action="{% url 'articles:likes' article.pk %}" method="POST">
+    {% csrf_token %}
+    {% if request.user in article.like_users.all %}
+    <input type="submit" value="좋아요 취소">
+    {% else %}
+    <input type="submit" value="좋아요">
+    {% endif %}
+  </form>
 </div>
-</div>
+
+<a href="{% url 'articles:detail'  article.pk%}">DETAIL</a>
+
+<hr>
+
+
 {% endfor %}
 
 

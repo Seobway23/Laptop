@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from .models import Article
-from .forms import ArticleForm
-# Create your views here.
-
+from .models import Article, Comment
+from .forms import ArticleForm, CommentForm
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods, require_POST
 
 #인덱스
 def index(request):
@@ -14,6 +14,8 @@ def index(request):
     return render(request, 'articles/index.html',context)
 
 # 게시글 생성
+@login_required
+@require_http_methods(['GET', 'POST'])
 def create(request):
     if request.method == 'POST':
         print('POST')
@@ -35,8 +37,12 @@ def create(request):
 #게시글 디테일
 def detail(request, pk):
     article = Article.objects.get(pk=pk)
+    comment_form = CommentForm()
+    comments = article.comments.all()
     context= {
         'article' : article,
+        'comment_form':comment_form,
+        'comments': comments,
     }
     return render(request,'articles/detail.html', context)
 
@@ -53,11 +59,50 @@ def update(request, pk):
         form = ArticleForm(instance=article)
         context = {'article': article,'form' : form,}                                 
         return render(request,'articles/update.html', context)    
+    
+@require_POST
 #게시글 삭제
 def delete(request, pk):
     article = Article.objects.get(pk=pk)
-    if request.method=='POST':
-        article.delete()
-        return redirect('articles:index')
-    else:
+    if request.user.is_authenticated:
+        if request.user == article.user:
+            article.delete()
+            return redirect('articles:index')
+    return redirect('articles:detail', article.pk)
+
+
+@require_POST
+def comments_create(request, pk):
+    if request.user.is_authenticated:
+        article = Article.objects.get(pk=pk)
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.article = article
+            comment.user = request.user
+            comment.save()
+        # article 객체는 어떻게 저장?
+        #comment_form.save()
         return redirect('articles:detail', article.pk)
+    return redirect('accounts:login')
+
+# 왜 어쩔땐 되고 어쩔때는 안되는 거죠?
+@require_POST
+def comments_delete(request, article_pk, comment_pk):
+    if request.user.is_authenticated:
+        comment = Comment.objects.get(pk=comment_pk)
+        if request.user == comment.user:
+            comment.delete()
+    return redirect('articles:detail', article_pk)
+
+@require_POST
+def likes(request, article_pk):
+    if request.user.is_authenticated:     
+        article = Article.objects.get(pk=article_pk)
+        
+        if article.like_users.filter(pk=request.user.pk).exists():
+            article.like_users.remove(request.user)
+        else:
+            article.like_users.add(request.user)
+        return redirect('articles:index')
+    return redirect('accounts:login')

@@ -4,6 +4,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import get_user_model
 
 #login views
 def login(request):
@@ -75,3 +76,12 @@ def change_password(request):
         'form':form,
     }
     return render(request, 'accounts/change_password.html', context)
+
+def profile(request, username):
+    User = get_user_model()
+    person = User.objects.get(username=username)
+    context = {
+        'person':person,
+    }
+    return render(request, 'accounts/profile.html', context)
+

@@ -11,13 +11,46 @@
 
 {% comment %} <a href="{% url 'articles:update' %}"> update</a> {% endcomment %}
 
+{% if request.user == article.user %}
+<a href="{% url 'articles:update' article.pk %}">update</a>
 <form action="{% url 'articles:delete' article.pk %}" method="POST">
   {% csrf_token %}
   <input type="submit" value="DELETE">
 </form>
+{% endif %}
 
-<a href="{% url 'articles:update' article.pk %}">update</a>
 
+<hr>
+<h4>댓글 목록</h4>
+{% comment %} <h1>{{comments|length}}</h1> {% endcomment %}
+<p><b>{{comments.count}}</b>개의 댓글이 있습니다.</p>
+<ul>
+  {% for comment in comments %}
+    {{comment.user}} - {{comment.content}}
+    <li>{{comment.content}}</li>
+
+    {% if  request.user == comment.user %}
+    <form action="{% url 'articles:comments_delete' article.pk comment.pk %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="DELETE">
+    </form>
+    {% endif %}
+  {% empty %}
+  <p>댓글을 작성해보세요!</p>
+
+  {% endfor %}
+</ul>
+{% if request.user.is_authenticated %}
+<form action="{% url 'articles:comments_create' article.pk %}" method="POST">
+  {% csrf_token %}
+  {{comment_form}}
+  <input type="submit">
+</form>
+{% else %}
+<a href="{% url 'accounts:login' %}"> [ 댓글을 작성하려면 로그인하세요. ]</a>
+{% endif %}
+
+<hr>
 <a href="{% url 'articles:index' %}" method="GET">back</a>
 
 {% endblock content %}

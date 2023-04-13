@@ -13,6 +13,7 @@
 
   {% if user.is_authenticated %}
   <h3>hello, {{user}}</h3>
+  <a href="{% url 'accounts:profile' user.username%}">내 프로필</a>
   <div>
     <form action="{% url 'accounts:logout' %}" method="POST">
       {% csrf_token %}
