@@ -11,9 +11,11 @@ soup = BeautifulSoup(requests.text,'lxml')
 
 contents = soup.find_all("div", attrs ={"class":"main-shortcut-item"})
 
-i = 0
-for content in contents:
-    print(content.get_text())
-    i += 1
-    print(i)
+# i = 0
+# for content in contents:
+#     print(content.get_text())
+#     i += 1
+#     print(i)
 
+
+print(contents)
