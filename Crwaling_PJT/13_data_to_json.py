@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 
 
-base_url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query="
+base_url = "https://search.naver.com/search.naver?sm=tab_hty.top&where=news&query="
 
 name = input("검색종목을 입력하세요 : ")
 keyword=  name + "주식"

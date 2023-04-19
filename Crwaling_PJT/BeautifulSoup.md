@@ -1,5 +1,31 @@
+# 목표
+'''
+대목표 : 코스피 200 순위 중 가격이 10% 이상 변동되는 Stock의 이슈 파악
+구현 목표: 
+1. 크롤링 활용한 코스피 200 순위, 이슈 파악 크롤링
+2. 게시판으로 보여주기
+
+'''
+
+# 계획
+'''
+1. bs4 -> csv or json file save(done)
+2. selenium -> Using XPath, automotive click(done)
+3. json file -> To link Json and django page
+4. django 환경 익숙해지기
+5. vue.js 이용하여 fron 환경 만들기
+'''
+
+
+
+
+
 참고자료
 =======
+md 자료
+https://www.youtube.com/watch?v=eHUVvQ2AHh0
+
+
 - 공홈
 >https://www.crummy.com/software/BeautifulSoup/bs4/doc/
 

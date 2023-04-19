@@ -9,7 +9,7 @@ name = input("검색종목을 입력하세요 : ")
 keyword=  name + "주식"
 search_url = base_url + keyword
 
-# 서버 겟 요청보내면 응답 받음 d
+# 서버 겟 요청보내면 응답 받음
 r = requests.get(search_url)
 #html 넣고, parser 분석
 soup = BeautifulSoup(r.text, "html.parser")
