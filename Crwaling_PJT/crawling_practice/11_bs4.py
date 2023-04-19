@@ -6,7 +6,7 @@ import pandas
 base_url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query="
 
 name = input("검색종목을 입력하세요 : ")
-keyword=  name + "주식"
+keyword=  name #name에 추가하고 싶으면 추가
 search_url = base_url + keyword
 
 # 서버 겟 요청보내면 응답 받음

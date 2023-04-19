@@ -28,13 +28,30 @@ for i in range(len(items)):
     item = items[i].text
     content = contents[i].text
     crawl_datum = {
-    "순번":i+1,
-    "이름":name,
-    "제목":item,
-    "내용":content,
+        "순번":i+1,
+        "이름":name,
+        "제목":item,
+        "내용":content
     }
     crawl_data.append(crawl_datum)
 
 json_string = json.dumps(crawl_data, ensure_ascii=False, indent=4)
 with open("crawled_data.json", "w", encoding="utf-8") as f:
     f.write(json_string)
+
+
+
+'''
+{
+    "model": "articles.article",
+    "pk": 1,
+    "fields": {
+      "title": "Summer region chance benefit avoid alone.",
+      "content": "Try country perform increase hotel. Why shake grow poor for moment hit.\nHouse town week gun window but benefit.",
+      "created_at": "2013-08-18T02:18:03Z",
+      "updated_at": "1997-05-21T04:24:21Z"
+    }
+  },
+
+
+'''

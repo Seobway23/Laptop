@@ -11,6 +11,10 @@
 *.csv
 *.exe
 *.chromedriver
+*.json
+.json
+.csv
+*.csv
 
 .csv
 .exe
