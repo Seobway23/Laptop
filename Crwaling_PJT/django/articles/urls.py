@@ -3,5 +3,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('html/', views.article_html),
+    path('json_1/', views.articles_json_1),
+    path('json_2/', views.articles_json_2),
+    path('json_3/', views.articles_json_3),
+    path('v1/', views.articles_list),
+    path('v1/<int:article_pk>/', views.article_detail),
 ]

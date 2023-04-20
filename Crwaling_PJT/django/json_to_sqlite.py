@@ -19,10 +19,8 @@ with open("crawled_data.json", "r", encoding="utf-8") as f:
             content = datum['내용']
         )
         article.save()
-        print(article)
+        #print(article)
 
-    articles = Article.objects.all()
+    #articles = Article.objects.all()
 
 #이렇게 하니까, article -> DB에 저장됨
-
-

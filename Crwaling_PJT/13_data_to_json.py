@@ -1,3 +1,12 @@
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "crawl_pjt.settings")
+
+import django
+django.setup()
+
+from articles.models import Article
+import json
+
 import csv, json
 from bs4 import BeautifulSoup
 import requests
