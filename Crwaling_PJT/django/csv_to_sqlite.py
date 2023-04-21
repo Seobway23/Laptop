@@ -18,16 +18,13 @@ def str_to_int(N):
 
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "crawl_pjt.settings")
-
 from django.conf import settings
+import django
+django.setup()
 
 #이게 처음 DB에 없으면 오류가 남 왜 그런지는 잘 모르겠음
 # settings.configure(INSTALLED_APPS=['articles'])
 
-
-
-import django
-django.setup()
 
 from articles.models import Stock
 import csv
@@ -50,20 +47,21 @@ import csv
 with open("KOSPI200.csv", "r", encoding="utf-8", newline="") as f:
     data = csv.reader(f)
     for datum in data:
+        #print(datum)
         #print(i)
         #print(datum)
         stock = Stock(
-            Name=datum[1],
-            Current_price = str_to_int(datum[2]),
-            Previous_rate = str_to_int(datum[3]),
-            Rate_of_change = str_to_int(datum[4]),
-            Face_value = str_to_int(datum[5]),
-            Market_capitalization = str_to_int(datum[6]),
+            name=datum[1],
+            current_price = str_to_int(datum[2]),
+            previous_rate = str_to_int(datum[3]),
+            rate_of_change = str_to_int(datum[4]),
+            face_value = str_to_int(datum[5]),
+            market_capitalization = str_to_int(datum[6]),
             listed_stock = str_to_int(datum[7]),
-            Foreigner_ratio = str_to_int(datum[8]),
-            Trading_volume = str_to_int(datum[9]),
-            PER = str_to_int(datum[10]),
-            ROE = str_to_int(datum[11]),
+            foreigner_ratio = str_to_int(datum[8]),
+            trading_volume = str_to_int(datum[9]),
+            per = str_to_int(datum[10]),
+            roe = str_to_int(datum[11]),
         )
         stock.save()
 
