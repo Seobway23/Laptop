@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .done{
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+  <!-- <input type="text">
+  <button>add</button> -->
+  
+  <!-- 엔터, 버튼으로 자동적으로 페이지 넘어갈 수 있음 -->
+  <form action="" id="todo-form">
+    <input type="text">
+    <button>add</button>
+    <ul id ="todo-list">
+
+    </ul>
+  </form>
+
+  <script>
+    // 입력했을 때 제출하면 아래 글 리스트를 생성 
+    // 1. form select
+
+    // li태그 넣어주는 동작
+    // 7. ul 태그 선택
+    const todoList = document.querySelector('#todo-list')
+  
+
+    const todoForm = document.querySelector('#todo-form')
+    // 2. from event adhese
+    todoForm.addEventListener('submit', function(e) {
+      // 3. normal event delect
+      e.preventDefault()
+      // 4. select input tag in form
+      const todoInput = todoForm.querySelector('input')
+      // 5. input tag의 값 가져오기
+      // const value = todoInput.value
+      // 9. value trmming
+      const value =todoInput.value.trim()
+
+      if (value) {
+        
+        // 6. li tag 만들기
+        const liTag = document.createElement('li')
+        liTag.innerText = value
+        // liTag.innerText = todoForm.querySelector('input').value
+        // 8. li 태그 append
+        todoList.appendChild(liTag)
+        todoInput.value = ""
+        // todoInput.value.reset()
+        // 11. 업데이트 로직
+        liTag.addEventListener('click', function(e) {
+          liTag.classList.toggle('done')          
+        })
+
+        // 12. 삭제 버튼 만들기
+        const deleteBtn = document.createElement('button')
+        deleteBtn.innerText = '삭제'
+        liTag.appendChild(deleteBtn)
+        // 13. liTag 삭제
+        deleteBtn.addEventListener('click', function(e) {
+          e.stopPropagation()
+          // liTag.remove()
+          e.target.parentNode.remove()
+        })
+
+      // delete done -> 한 일 옮기기 해보기
+
+
+      } else{
+        alert('값을 입력하시오!')
+      }
+    })
+
+  </script>
+</body>
+</html>
