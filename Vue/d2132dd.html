@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="-1" />
+    <meta charset="utf8">
+    <title>Hello, world</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>첫 번째 입력: {{message1}}</h1>
+      <input type="text" v-model="message1">
+    </div>
+    <div id="app2">
+      <h1>두 번째 입력: {{message2}}</h1>
+      <input type="text" v-model="message2">
+    </div>
+
+    <div id="app3">합산 입력: {{sumMessage}}</div>
+
+    <script type="text/javascript">
+      const app = new Vue({
+        el : '#app',
+        data : {
+          message1:'',
+        },
+      })
+      const app2 = new Vue({
+        el:'#app2',
+        data: {
+          message2:'',
+        },
+      })
+      const app3 = new Vue({
+        el:'#app3',
+        data:{
+          // Remove this line as it is unnecessary
+          // sumMessage: message1 + message2,
+        },
+        computed: {
+          sumMessage: function() {
+            // Access message1 and message2 from the other Vue instances
+            return app.message1 + app2.message2;
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
