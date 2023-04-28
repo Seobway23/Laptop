@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% for movie in recommended_movies %}
+<div>
+  <h1><p>{{movie.title}}</p></h1>
+    <p>release_date: {{movie.release_date}}</p>
+    <p>popularity : {{movie.popularity}}</p>
+    <p>vote_count : {{movie.vote_count}}</p>
+    <p>vote_average : {{movie.vote_average}}</p>
+    <p>overview : {{movie.overview}}</p>
+    <img src="{{movie.poster_path}}" alt="poster">
+    <p>genres : {{movie.genres}}</p>
+  </div>
+  
+
+
+
+
+{% endfor %}
+{% endblock %}

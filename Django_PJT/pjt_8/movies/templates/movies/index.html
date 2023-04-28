@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Movies</h1>
+  <h2><a href="{% url 'movies:recommended' %}">영화 추천</a></h2>
+  <hr>
+  {% for movie in movies %}
+  <p><a href="{% url 'movies:detail' movie.pk %}">제목: {{movie.title}}</a></p>
+  <p>개봉일: {{movie.release_date}}</p>
+  <hr>
+  <br>
+  {% endfor %}
+{% endblock %}
