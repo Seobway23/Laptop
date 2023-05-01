@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <button @click="fetchImg"> 클릭 </button>
+    <img :src="imgSrc" alt="img">
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script >
+    const app = new Vue({
+      el: '#app',
+      data: {
+        imgSrc:"",
+      },
+      methods:{
+        fetchImg(){
+          axios.get('https://dog.ceo/api/breeds/image/random')
+          //.then(res=>console.log(res)) //당연한거지만, console log는 프린트하지 리턴하지 않는다,
+          .then(res=> this.imgSrc = res.data.message)
+        }
+      },
+      computed: {
+        doubleCount(){
+          return this.count*2
+        }
+      },
+      watch:{
+        count() {
+          console.log('count가 바뀜!')
+        }
+      }
+    })
+  </script>
+</body>
+</html>
