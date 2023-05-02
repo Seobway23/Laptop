@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    button {
+      background: none;
+      border: 1px solid black;
+      width: 100px;
+      height: 50px;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+      margin-left: 10px;
+    }
+
+    .selected {
+      border: 1px solid rgb(80, 184, 231);
+      background-color: rgb(185, 226, 245);
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>버튼을 골라주세요</h1>
+    <button :class="{'selected':selectedButton === 1}" @click="selectButton(1)">선택 1</button>
+    <button :class="{'selected':selectedButton ===2}" @click="selectButton(2)">선택 2</button>
+  
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        selectedButton: null // 지정한 앱의 변수처럼 사용하겠음, method 함수로 사용하겠음
+      },
+      methods: {
+      selectButton(buttonNumber) {
+        if (this.selectedButton === buttonNumber) {
+          this.selectedButton = null;
+        } else {
+          this.selectedButton = buttonNumber;
+        }
+      }
+    }
+    })
+  </script>
+</body>
+</html>

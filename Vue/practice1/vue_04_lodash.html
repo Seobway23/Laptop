@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <h1>점심메뉴</h1>
+    <button @click="selectDish"> Pick One</button>
+    <h4>{{counter}}번째 클릭</h4>
+    <h2>{{dish}}</h2>
+  </div>
+
+  <hr>
+  <div id="app2">
+    <h1>로또</h1>
+    <button @click="selectNumber">Get Lucky Numbers</button>
+    <h2>{{sixNumbers}}</h2>
+  </div>
+
+  <hr>
+  <div id="app3">
+    <button @click="incrementCounter">counter+</button>
+    <p>Counter: {{counter}}</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash/lodash.min.js"></script>
+
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        dish:null,
+        dishes:['김밥','국밥', '짜장면', '감자탕', '알밥', '칼국수', '막국수', '햄버거', '샌드위치', '아아나드셈'],
+        counter:0,
+
+      },
+      methods: {
+        selectDish() {
+          //console.log(this.dishes)
+          const index = _.random(0,this.dishes.length)
+          //const index = Math.floor(Math.random() * this.dishes.length);
+          this.dish = this.dishes[index]
+          //console.log(this.dish)
+          this.counter++
+        }
+      }
+    })
+
+    const app2 = new Vue({
+      el: '#app2',
+      data: {
+        sixNumbers: null,
+      },
+      methods: {
+        selectNumber(){
+          const numbers = _.sampleSize(_.range(1,46), 6)
+          this.sixNumbers = numbers
+          console.log(this.sixNumbers)
+        }
+      }
+
+    })
+
+
+
+    const app3 = new Vue({
+      el:'#app3',
+      data: {
+        counter : 0
+      },
+      methods:{
+        incrementCounter() {
+          this.counter++
+        }
+      }
+    })
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <div>
+    <h1>MBTI 검사기</h1>
+    </div>  
+    <div>
+      <input type="text" v-model="mbti" @keyup.enter="Search">
+      <!-- @keyup.enter -> enter해도 function으로 넘어갈 수 있음 -->
+      
+      <button @click="Search">결과 보기</button>
+      <p>{{mbti}}</p>
+    </div>
+    <div>
+    <!-- <embed width="100%" height="700px" src="https://www.16personalities.com/ko/성격유형-intj" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></embed>
+    <iframe src="https://www.16personalities.com/ko/성격유형-intj" frameborder="0"></iframe> -->
+    </div>
+  
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        mbti:null,
+        allTypes : ['istj', 'isfj', 'infj', 'intj', 'istp', 'isfp', 'infp', 'intp', 'estp', 'esfp', 'enfp', 'entp', 'estj', 'esfj', 'enfj', 'entj']
+      },
+      methods:{
+        Search(){
+          const MBTI = this.mbti.toLowerCase()
+          if (this.allTypes.includes(MBTI)) {
+            console.log(MBTI)
+            console.log(this.MBTI)
+            const url = `https://www.16personalities.com/ko/성격유형-${MBTI}`
+            window.open(url, '_blank') // 새로운 창
+            //window.location.href = url; //기존 창에서 이동
+          }
+          else{
+            alert('다시 입력하세요.')
+          }
+
+
+        }
+      },
+    })
+  </script>
+</body>
+</html>

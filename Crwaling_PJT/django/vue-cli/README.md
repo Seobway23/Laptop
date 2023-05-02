@@ -1,4 +1,4 @@
-# pjt1
+# vue-cli
 
 ## Project setup
 ```
