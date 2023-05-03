@@ -1,10 +1,11 @@
 <template>
   <div class="hello">
-    <h1>이곳은 HelloWorld.vue 입니다.</h1>
+    <h1>{{msg}}</h1>
     <br>
     <br>
     <br>
     <h4>SSAFY 여러분을 응원합니다.</h4>
+    <button @click="emitEvent">emeitEvent</button>
   </div>
 </template>
 
@@ -13,6 +14,12 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  methods :{
+    emitEvent(){
+      console.log(this.msg)
+      this.$emit('event-name', {data:123})
+    }
   }
 }
 </script>
