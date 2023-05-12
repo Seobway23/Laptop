@@ -26,7 +26,7 @@ export default new Vuex.Store({
   actions: {
     fetchPopularMovies(context) {
       if (!context.state.movies.length){
-      const apiKey = '256b61b60a713d12f9806d31ce87c1dc'
+      const apiKey = 'api키써야합니당'
       const movieurl = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
 
       axios({
