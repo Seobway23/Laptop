@@ -3,6 +3,8 @@ sys.stdin = open('input.txt')
 
 
 def dfs(index, total, plus, minus, multiply, divide):
+    # print(index)
+    # print(index, total, plus,minus,  multiply,)
     global mx, mn
     if index == N:
         mx = max(total, mx)
@@ -15,12 +17,13 @@ def dfs(index, total, plus, minus, multiply, divide):
     if minus:
         dfs(index + 1, total - num_lst[index], plus, minus - 1, multiply, divide)
 
-    if plus:
+    if multiply:
         dfs(index + 1, total * num_lst[index], plus, minus, multiply - 1, divide)
 
-    if plus:
+    if divide:
         dfs(index + 1, int(total/num_lst[index]), plus, minus, multiply, divide-1)
 
+    return
 
 N = int(input())
 num_lst = list(map(int, input().split()))
