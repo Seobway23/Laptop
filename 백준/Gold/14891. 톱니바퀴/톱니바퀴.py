@@ -1,6 +1,5 @@
 from collections import deque
 
-
 def check_right(g, direction):
     global Dir
     if g > 3 or gear[g-1][2] == gear[g][6]:
