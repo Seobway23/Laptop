@@ -10,6 +10,7 @@ import sys
 from collections import deque
 sys.stdin = open('input.txt')
 
+
 def check_right(g, direction):
     global Dir
     if g > 3 or gear[g-1][2] == gear[g][6]:
@@ -20,6 +21,7 @@ def check_right(g, direction):
         check_right(g + 1, -direction)
         # 돌린다음에 체크
         gear[g].rotate(direction)
+
 
 def check_left(g, direction):
     global Dir
