@@ -60,8 +60,6 @@ while i < 9:
         fish_list[i] = B
 
         q = fish_list3[0]
-        print('dist:', dist, 'i:', i, 'fish_list3:' ,fish_list3, 'q:', q)
-
         # 계산
         dist = q[0]
         cy = q[1]
@@ -70,6 +68,8 @@ while i < 9:
         shark_y = cy
         shark_x = cx
         shark_eat += 1
+        print('cx:',cx,'cy:', cy,'dist:', dist, 'i:', i, 'fish_list3:' ,fish_list3,)
+
         # 갱신
         arr[cy][cx] = 0
 
@@ -82,8 +82,13 @@ while i < 9:
             shark_size += 1
             shark_eat = 0
             i += 1
-
     else:
         break
-
 print(ans)
+
+'''
+# 이 코드의 문제점
+size가 2에서 3으로 갈 때, 2가 여러개 남았으면, 먹는 물고기임에도 불구하고
+이 코드에서는 먹지 않고 그냥 넘어감
+
+'''
