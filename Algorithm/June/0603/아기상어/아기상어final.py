@@ -44,8 +44,6 @@ def BFS(y, x):
                     visited[ny][nx] = visited[cy][cx] + 1
                     queue.append([ny, nx])
 
-
-
     # 우선순위에 따른 리스트 정렬 후 return// 0 거리, 1 y축, 2 x축
     return sorted(cand, key=lambda x: (x[0], x[1], x[2]))
 
