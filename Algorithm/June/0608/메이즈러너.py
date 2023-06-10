@@ -8,7 +8,6 @@
 - 출구 : 해당칸에 도달하면 즉시 탈출
 
 
-
 3. 참가자
 - 최단거리:  좌표의 차이
 - 모든 참가자 동시에 이동
@@ -16,6 +15,8 @@
 - 출구의 최단거리와 가까워야 함
 - 상하 움직임 우선
 - 참가자끼리 중복 가능
+- 최단거리이지만, 벽이 있는 경우 이동하지 못함
+
 
 di = [-1, 1, 0, 0]
 dj = [0,0, -1, 1]
@@ -59,8 +60,13 @@ for _ in range(M):
 exit_i, exit_j = map(int, input().split())
 ei, ej = exit_i -1, exit_j -1
 
+# 탈출구 표시
+part[ei][ej] = -1
+
 # 움직임 조건 -> 출구 방향으로 한칸씩 이동
 # 최단거리는 출구와 위치의 최단 거리
+
+
 
 
 def flag_func(part):
@@ -70,6 +76,7 @@ def flag_func(part):
                 flag = True
                 return flag
 
+# 다음 움직일 위치 찾기
 def move(si, sj):
     global ei, ej, ans
     # 초기값  이동할 distance, dir
@@ -103,7 +110,7 @@ def square(ri, rj):
     # deepcopy를 쓰거나, 새로 만들어준다,
     part_arr = [[0]*side_len for _ in range(side_len)]
 
-    # print('side_len:', side_len)
+    print('side_len:', side_len)
     # print('squre_arr:', squre_arr)
     # print('part_arr:', part_arr)
 
@@ -115,8 +122,6 @@ def square(ri, rj):
             for ki in range(i, i + side_len):
                 for kj in range(j, j + side_len):
                     # print('ki:', ki, 'kj:', kj, 'ri:', ri, 'rj:', rj)
-
-                    d= i; dd = j; ddd=ki; dddd=kj
                     if ki == ri and kj == rj:
                         dot_cnt += 1
 
@@ -124,12 +129,15 @@ def square(ri, rj):
                         dot_cnt += 1
 
                     if dot_cnt == 2:
-                        for ni in range(i,ki+1):
-                            for nj in range(j, kj + 1):
-                                print('ni:', ni, 'nj:', nj)
-                                part_arr[ni][nj] = part[ni][nj]
-                                squre_arr[ni][nj] = arr[ni][nj]
+                        # 배열 갱신 후
+                        for ni in range(i, ki):
+                            for nj in range(j, kj):
+                                # print('ni-i:', ni - i, 'nj-j:', nj - j)
+                                part_arr[ni-i][nj-j] = part[ni][nj]
+                                squre_arr[ni-i][nj-j] = arr[ni][nj]
 
+                                print(part_arr, squre_arr)
+                        # return
                         return squre_arr, part_arr, i, ki, j, kj
 
 
@@ -141,7 +149,7 @@ def rotate(squre_arr, part_arr):
 
     dummy_arr = [[0] * (num) for _ in range(num)]
     dummy_part= [[0] * (num) for _ in range(num)]
-    print(dummy_arr,'&&&',dummy_part)
+    # print(dummy_arr,'&&&',dummy_part)
 
 
     # 회전하기 -> 덮어쓰기
@@ -163,7 +171,7 @@ def rotate(squre_arr, part_arr):
             part[i][j] = dummy_part[i-zi][j-zj]
             arr[i][j] = dummy_arr[i-zi][j-zj]
 
-    print(part)
+    # print(part)
 
 
 
@@ -174,19 +182,21 @@ ans = 0
 flag = True
 while flag:
     flag = False
-    # 1. 참가자 이동 시작
+    # 1. 참가자 목록
     part_move = []
     for i in range(N):
         for j in range(N):
             if part[i][j]:
                 part_move.append([i, j])
 
+    # 2. 참가자 있으면 다음 위치 갱신
     next_position = []
     for ii, jj in part_move:
         dist, ni, nj = move(ii, jj)
 
         # 탈출 조건
         if ni == ei and nj == ej:
+            part[ii][jj] -= 1
             continue
 
         # 움직임 갱신
@@ -212,5 +222,12 @@ while flag:
     flag = flag_func(part)
 
 
+for yi in range(N):
+    for yj in range(N):
+        if part[yi][yj] == -1:
+            break
+
+print(ans)
+print(yi,yj)
 
 
