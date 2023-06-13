@@ -1,3 +1,15 @@
+# 1 crawling -> json data
+stock_to_csv.py
+
+# 2 json data 
+json_to_sqlite.py
+
+# 3. csv_to_sqlite
+csv_to_sqlite.py
+
+
+
+
 ### dumpdata -UTF-8
 1. EXPORT
 - export PYTHONIOENCODING=utf-8
@@ -23,4 +35,3 @@ DATABASES = {
 }
 ```
 ------
-
