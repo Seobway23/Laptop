@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Form from './basic/Form';
 import reportWebVitals from './reportWebVitals';
+import TodoApp from './TodoApp';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Form/>
+    <TodoApp />
   </React.StrictMode>
 );
 
