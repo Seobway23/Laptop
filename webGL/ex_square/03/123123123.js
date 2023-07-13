@@ -1,23 +1,40 @@
 import * as THREE from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+// 렌더 루프 다시 해야 함
+// 
+
 
 class App {
 	constructor() {
+		// 전역 변수 설정
+
+		// class 입히기 
 		const divContainer = document.querySelector("#webgl-container");
 		this._divContainer = divContainer;
 
+		const particles = [];
+		this._particles = particles
+
+
+		const mouseX = 0, mouseY = 0;
+		this._mouseX = mouseX, this._mouseY = mouseY;
+
+
+		// 뭔지 잘 모름
 		const renderer = new THREE.WebGLRenderer({ antialias: true });
 		renderer.setPixelRatio(window.devicePixelRatio);
 		divContainer.appendChild(renderer.domElement);
 		this._renderer = renderer;
 
-		const scene = new THREE.Scene();66
+		// 장면 추가 
+		const scene = new THREE.Scene();
 		this._scene = scene;
 
 		this._setupCamera();
 		this._setupLight();
-		this._setupModel();
+		// this._setupModel();
 		this._setControls();
+		this._updateparticles();
 
 
 		window.onresize = this.resize.bind(this);
@@ -29,8 +46,8 @@ class App {
 	_setupCamera() {
 		const width = this._divContainer.clientWidth;
 		const height = this._divContainer.clientHeight;
-		const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
-		camera.position.z = 2;
+		const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100); // 시야 종횡비
+		camera.position.z = 2; // 카메라 위치
 		this._camera = camera;
 
 	}
@@ -95,7 +112,66 @@ class App {
 		// this._cube.rotation.y = time;
 		// this._cube.rotation.z = time;
 
+		// particle 업데이트하기
+		updateparticles();
+
+
 	}
+
+	_updateparticles() {
+		var particle, material; 
+		// we're gonna move from z position -1000 (far away) 
+		// to 1000 (where the camera is) and add a random particle at every pos. 
+		for ( var zpos= -1000; zpos < 1000; zpos+=20 ) {
+			// we make a particle material and pass through the 
+			// colour and custom particle render function we defined. 
+			material = new THREE.PointsMaterial( { color: 0xffffff, size: 10} );
+			// make the particle
+			particle = new THREE.Points(new THREE.BufferGeometry(), material);
+		
+			// give it a random x and y position between -500 and 500
+			particle.position.x = Math.random() * 1000 - 500;
+			particle.position.y = Math.random() * 1000 - 500;
+		
+			// set its z position
+			particle.position.z = zpos;
+		
+			// scale it up a bit
+			particle.scale.x = particle.scale.y = 10;
+		
+			// add it to the scene
+			this._scene.add( particle );
+		
+			// and to the array of particles. 
+			this._particles.push(particle); 
+		}
+
+		for(var i=0; i<this._particles.length; i++) {
+ 
+			particle = this._particles[i]; 
+	 
+			// and move it forward dependent on the mouseY position. 
+			particle.position.z +=  this._mouseY * 0.1;
+	 
+			// if the particle is too close move it to the back
+			if(particle.position.z>1000) particle.position.z-=2000; 
+	 
+		}
+
+	}
+
+	particleRender( context ) {
+ 
+		// we get passed a reference to the canvas context
+		context.beginPath();
+		// and we just have to draw our shape at 0,0 - in this
+		// case an arc from 0 to 2Pi radians or 360º - a full circle!
+		context.arc( 0, 0, 1, 0,  Math.PI * 2, true );
+		context.fill();
+	}
+
+
+
 }
 
 window.onload = function () {
