@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="01-basic.css" />
+		<script type="module" src="main.js" defer></script>
+		<title>Document</title>
+	</head>
+	<body>
+		<div id="webgl-container">
+		</div>
+
+		<div>
+			<div>
+				<h1>Main page</h1>
+			</div>
+			<div>
+				<ul id="point-list"></ul>
+			</div>
+			<div>
+				<input type="text" class="column">
+			</div>
+		</div>
+		
+
+	</body>
+</html>
+<!-- innerHTML, innerText -->
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		import App from './main.js';
+
+		const pointList = document.getElementById('point-list');
+		const app = new App();
+
+		app.getPoints().forEach((point, index) => {
+			const listItem = document.createElement('li');
+			listItem.textContent = `Point ${index + 1}: (${point.x}, ${point.y})`;
+			pointList.appendChild(listItem);
+		});
+	});
+</script>

@@ -1,0 +1,22 @@
+* {
+    outline: none;
+    margin: 0;
+  }
+  
+  body {
+    /* overflow: hidden; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #webgl-container {
+    position: absolute;
+    display: flex;
+    top: 50px;
+    /* left: 0; */
+    width: 375px ;
+    height: 667px ;
+    justify-content: center;
+    align-items: center;
+  }
