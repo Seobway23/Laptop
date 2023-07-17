@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {v4 as uuidv4} from 'uuid';
 
 export default function AddTable({onAdd}) {
-    const [list, setList] = useState('');
+    const [list, setList] = useState([]);
 
     const handleChange = (e) => {
         setList(e.target.value)
