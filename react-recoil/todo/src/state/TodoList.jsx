@@ -7,5 +7,5 @@ export const todoListState = atom({
 
 export const hello = atom({
   key: 'hello',
-  default: ['hello', '봉쥬루~ㄴ', '헬로'],
+  default: [],
 });
