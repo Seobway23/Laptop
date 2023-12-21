@@ -1,45 +1,56 @@
 from collections import deque
 
 
-def dfs(graph, start, visited):
-    global ans_dfs
-    visited[start] = True
-    ans_dfs.append(start)
-    for node in sorted(graph[start]):
-        if not visited[node]:
-            dfs(graph, node, visited)
+def dfs(start, visited):
+    global dfs_ans
+    visited[start] = 1
+    dfs_ans.append(start)
+    for i in nodes[start]:
+        if i and not visited[i]:
+            dfs(i, visited)
     return
 
 
-def bfs(graph, start):
-    global ans_bfs
-    visited = [False] * (len(graph) + 1)
-    queue = deque([start])
-    visited[start] = True
-    while queue:
-        v = queue.popleft()
-        ans_bfs.append(v)
-        for node in sorted(graph[v]):
-            if not visited[node]:
-                queue.append(node)
-                visited[node] = True
+def bfs(start):
+    global bfs_ans
+    visited = [0] * (n + 1) # 방문 표시
+    q =deque()
+    q.append(start)
+    visited[start] = 1
+    bfs_ans.append(start)
+
+    while q:
+        t = q.popleft()
+        for i in nodes[t]:
+            if i and not visited[i]:
+                q.append(i)
+                visited[i] = 1
+                bfs_ans.append(i)
     return
 
 
-# 예제 입력 1
+# 입력
 n, m, v = map(int, input().split())
-edges = [ list(map(int, input().split())) for _ in range(m)]
+nodes = [[] for _ in range(n + 1)]     # 0 인덱스 안씀
 
-# 그래프 생성
-graph = [[] for _ in range(n + 1)]
-for edge in edges:
-    graph[edge[0]].append(edge[1])
-    graph[edge[1]].append(edge[0])
+dfs_ans = []
+bfs_ans = []
 
-# DFS 와 BFS 수행
-ans_dfs, ans_bfs = [], []
-dfs(graph, v, [False] * (n + 1))
-bfs(graph, v)
+for _ in range(m):
+    a, b = map(int, input().split())
+    nodes[a].append(b)
+    nodes[b].append(a)
 
-print(*ans_dfs)
-print(*ans_bfs)
+for lst in nodes:
+    if lst:
+        lst.sort()
+
+# dfs
+visited = [0] * (n + 1)
+dfs(v, visited)
+
+# bfs
+bfs(v)
+
+print(*dfs_ans)
+print(*bfs_ans)
