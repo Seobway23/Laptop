@@ -1,10 +1,12 @@
 def dfs(target, ans_tar):
-    global ans, n
+    global ans
+    # 목표 도달
     if target == 1:
         if ans > ans_tar:
             ans = ans_tar
         return
     
+    # 종료 조건
     if ans < ans_tar:
         return
 
@@ -16,10 +18,10 @@ def dfs(target, ans_tar):
 
     dfs(target - 1, ans_tar + 1)
 
+
 n = int(input())
 ans = 10**6
 
-target = n
-dfs(target, 0)
+dfs(n, 0)
 
 print(ans)
