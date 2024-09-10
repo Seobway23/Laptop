@@ -1,25 +1,35 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
+
 using namespace std;
 
-bool can_distribute(const vector<long long>& jewels, long long N, long long mid) {
-    long long count = 0;
-    for (auto jewel : jewels) {
-        count += (jewel + mid - 1) / mid;  // mid 이하의 개수로 나눌 때 필요한 학생 수
-        if (count > N) return false;  // 학생 수를 초과하면 더 이상 계산할 필요 없음
+bool canDistribute(const int jewels[], int m, int n, int maxJealousy) {
+    int neededStudents = 0;
+    for (int i = 0; i < m; i++) {
+        neededStudents += (jewels[i] + maxJealousy - 1) / maxJealousy;
+        if (neededStudents > n) {
+            return false;
+        }
     }
-    return count <= N;
+    return true;
 }
 
-long long find_minimum_jealousy(long long N, const vector<long long>& jewels) {
-    long long low = 1;
-    long long high = *max_element(jewels.begin(), jewels.end());
-    long long result = high;
+int main() {
+    int n, m;
+    cin >> n >> m;
+    int jewels[m];
+
+    int maxJewels = 0;
+    for (int i = 0; i < m; i++) {
+        cin >> jewels[i];
+        maxJewels = max(maxJewels, jewels[i]);
+    }
+
+    int low = 1, high = maxJewels, result = maxJewels;
 
     while (low <= high) {
-        long long mid = (low + high) / 2;
-        if (can_distribute(jewels, N, mid)) {
+        int mid = (low + high) / 2;
+        if (canDistribute(jewels, m, n, mid)) {
             result = mid;
             high = mid - 1;
         } else {
@@ -27,18 +37,7 @@ long long find_minimum_jealousy(long long N, const vector<long long>& jewels) {
         }
     }
 
-    return result;
-}
+    cout << result << endl;
 
-int main() {
-    long long N, M;
-    cin >> N >> M;
-    vector<long long> jewels(M);
-
-    for (int i = 0; i < M; i++) {
-        cin >> jewels[i];
-    }
-
-    cout << find_minimum_jealousy(N, jewels) << endl;
     return 0;
 }
