@@ -1,12 +1,17 @@
-SELECT b.title,
-       b.board_id,
-       r.reply_id,
-       r.writer_id,
-       r.contents,
-       DATE_FORMAT(r.created_date, '%Y-%m-%d') as created_date
-FROM   used_goods_board b
-       JOIN used_goods_reply r
-         ON b.board_id = r.board_id
-WHERE b.created_date 
-    BETWEEN '2022-10-01' AND '2022-10-31'
-ORDER  BY created_date, title
+SELECT 
+    B.TITLE, 
+    B.BOARD_ID, 
+    A.REPLY_ID, 
+    A.WRITER_ID,
+    A.CONTENTS,
+    DATE_FORMAT(A.CREATED_DATE, '%Y-%m-%d') AS CREATED_DATE
+FROM 
+    USED_GOODS_BOARD B
+JOIN 
+    USED_GOODS_REPLY A
+ON 
+    B.BOARD_ID = A.BOARD_ID
+WHERE 
+    B.CREATED_DATE BETWEEN '2022-10-01' AND '2022-10-31'
+ORDER BY 
+    CREATED_DATE ASC, TITLE ASC
