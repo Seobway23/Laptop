@@ -1,69 +1,70 @@
-import sys
-
-sys.setrecursionlimit(100000)  # 필요에 따라 재귀 한도 증가
-
-N = int(sys.stdin.readline())
-board = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
-max_tile = 0
-
 def move_left(board):
     N = len(board)
-    new_board = []
+    merge = []
     for row in board:
         new_row = []
-        temp = [num for num in row if num != 0]
-        idx = 0
-        while idx < len(temp):
-            if idx + 1 < len(temp) and temp[idx] == temp[idx + 1]:
-                new_row.append(temp[idx] * 2)
-                idx += 2
+        tiles = [num for num in row if num != 0]
+        i = 0
+        while i < len(tiles):
+            if i + 1 < len(tiles) and tiles[i] == tiles[i + 1]:
+                new_row.append(tiles[i] * 2)
+                i += 2
             else:
-                new_row.append(temp[idx])
-                idx += 1
+                new_row.append(tiles[i])
+                i += 1
         new_row.extend([0] * (N - len(new_row)))
-        new_board.append(new_row)
-    return new_board
+        merge.append(new_row)
+    return merge
 
 def move_right(board):
     N = len(board)
-    new_board = []
+    merge = []
     for row in board:
         new_row = []
-        temp = [num for num in row if num != 0][::-1]
-        idx = 0
-        while idx < len(temp):
-            if idx + 1 < len(temp) and temp[idx] == temp[idx + 1]:
-                new_row.append(temp[idx] * 2)
-                idx += 2
+        tiles = [num for num in row if num != 0][::-1]
+        i = 0
+        while i < len(tiles):
+            if i + 1 < len(tiles) and tiles[i] == tiles[i + 1]:
+                new_row.append(tiles[i] * 2)
+                i += 2
             else:
-                new_row.append(temp[idx])
-                idx += 1
+                new_row.append(tiles[i])
+                i += 1
         new_row.extend([0] * (N - len(new_row)))
-        new_row = new_row[::-1]
-        new_board.append(new_row)
-    return new_board
+        merge.append(new_row[::-1])
+    return merge
 
 def move_up(board):
-    transposed_board = [list(row) for row in zip(*board)]
-    moved_board = move_left(transposed_board)
-    new_board = [list(row) for row in zip(*moved_board)]
-    return new_board
+    trans_board = [list(row) for row in zip(*board)]
+    new_board = move_left(trans_board)
+    merge = [list(row) for row in zip(*new_board)]
+    return merge
 
 def move_down(board):
-    transposed_board = [list(row) for row in zip(*board)]
-    moved_board = move_right(transposed_board)
-    new_board = [list(row) for row in zip(*moved_board)]
-    return new_board
+    trans_board = [list(row) for row in zip(*board)]
+    new_board = move_right(trans_board)
+    merge = [list(row) for row in zip(*new_board)]
+    return merge
 
 def dfs(board, depth):
     global max_tile
     max_tile = max(max_tile, max(map(max, board)))
+    # 종료 조건
     if depth == 5:
         return
+
+    # 4방향 탐색
     for move in [move_left, move_right, move_up, move_down]:
         new_board = move(board)
+
         if new_board != board:
             dfs(new_board, depth + 1)
 
+    return
+
+# 초기값 input
+n = int(input())
+board = [list(map(int, input().split())) for _ in range(n)]
+max_tile = 0
 dfs(board, 0)
 print(max_tile)
