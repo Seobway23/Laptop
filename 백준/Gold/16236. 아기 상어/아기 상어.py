@@ -1,96 +1,83 @@
 
 from collections import deque
 
+def BFS(si, sj):
+    # init
+    q = deque()
+    v = [[0] * n for _ in range(n)]
 
-'''
-1. input
+    # 한 스텝 추가를 어떻게 하지 ?
+    tlst = []
+    cnt = 0
 
-2. 움직임
-1) 가장 위에 물고기
-2) 가장 왼쪽 물고기
-3) ans += 1 -> 최종 출력 -> 시간
+    # q추가
+    q.append((si, sj))
+    v[si][sj] = 1
 
-3. shark
-1) size
-2) eat
-'''
+    while q:
+        ti, tj = q.popleft()
+        if v[ti][tj] == cnt:
+            return tlst, cnt  - 1
+        for di, dj in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+            ni, nj = ti + di, tj + dj
 
-# BFS (가까운 먹이 탐색)
-def BFS(y, x):
-    # y, x는 현재 위치에서 BFS
-    # visited는 거리 메모 테이블
-    visited = [[0] * N for _ in range(N)]
-    queue = deque([[y, x]])
-    cand = []
+            # 범위내, 미방문, 조건 내
+            if 0 <= ni < n and 0 <= nj < n and v[ni][nj] == 0 and shark >= arr[ni][nj]:
+                # q 추가
+                q.append((ni, nj))
 
-    visited[y][x] = 1
+                # 방문 표시
+                v[ni][nj] = v[ti][tj] + 1
 
-    while queue:
-        cy, cx = queue.popleft()
-        for i in range(4):  # 4방향 탐색
-            ny, nx = cy + dy[i], cx + dx[i]
-
-            # 범위내, 미방문일 떄
-            if 0 <= ny < N and 0 <= nx < N and visited[ny][nx] == 0:
-
-                # 먹을 수 있을 때
-                if arr[y][x] > arr[ny][nx] and arr[ny][nx] != 0:
-                    visited[ny][nx] = visited[cy][cx] + 1
-                    # 후보에 추가 // 처음에 visited +1을 해줬으니 -1해줘야 함
-                    cand.append((visited[ny][nx] - 1, ny, nx))
-
-                # 만약 같거나, 방문지가 0이라면, queue에 넣어서 탐색
-                elif arr[y][x] == arr[ny][nx] or arr[ny][nx] == 0:
-                    visited[ny][nx] = visited[cy][cx] + 1
-                    queue.append([ny, nx])
+                # 물고기 eat
+                if shark > arr[ni][nj] > 0:
+                    tlst.append((ni, nj))
+                    cnt = v[ni][nj]
 
 
+    # 첫 방문을 1로 잡았으니까 나머지에서 1 빼줘야 함
+    return tlst, cnt - 1
 
-    # 우선순위에 따른 리스트 정렬 후 return// 0 거리, 1 y축, 2 x축
-    return sorted(cand, key=lambda x: (x[0], x[1], x[2]))
-
-
-# input
-N = int(input())
-arr = [list(map(int, input().split())) for _ in range(N)]
-
-# 방향
-dy = [-1, 0, 1, 0]
-dx = [0, 1, 0, -1]
-
-# sx, sy 찾기 arr[y][x]
-for i in range(N):
-    for j in range(N):
-        if arr[i][j] == 9:
-            sy = i
-            sx = j
-
-# 초기값
-shark_size = 2
-shark_eat = 0
+# init
+n = int(input())
+arr = [list(map(int, input().split())) for _ in range(n)]
 ans = 0
+shark = 2
+eat = 0
 
+# shark 위치
+si, sj =  0, 0
+for i in range(n):
+    for j in range(n):
+        if arr[i][j] == 9:
+            si, sj = i, j
+            arr[i][j] = 0
+
+# main loop
 while True:
-    # 처음 시작 9를 2로 갱신
-    arr[sy][sx] = shark_size
-    # 후보 리스트 deque 갱신
-    candidate = deque(BFS(sy, sx))
-    # print(candidate)
-    # print(sy, sx)
+    tlst, cnt = BFS(si, sj)
+    # si, sj 갱신
 
-    if not candidate:
+    # shark 이동이 없다면 => 이거 어떻게 풀이 하는지 나중에 봐야 함
+    if len(tlst) == 0:
         break
 
-    # candidate pop
-    dist, yy, xx = candidate.popleft()
-    ans += dist
-    shark_eat += 1
+    # i, j 순 정렬
+    tlst.sort(key = lambda x: (x[0], x[1]))
+    si, sj = tlst[0]
 
-    if shark_size == shark_eat:
-        shark_size += 1
-        shark_eat = 0
+    # 물고기 위치 0 갱신
+    arr[si][sj] = 0
+    eat += 1
 
-    arr[sy][sx] = 0
-    sy, sx = yy, xx
+    # eat , shark 갱신
+    if shark == eat:
+        shark += 1
+        eat = 0
+
+
+    # ans 갱신
+    ans += cnt
+
 
 print(ans)
