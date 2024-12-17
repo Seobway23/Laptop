@@ -1,0 +1,10 @@
+SELECT B.USER_ID, B.NICKNAME, SUM(A.PRICE) AS TOTAL_SALES
+FROM USED_GOODS_BOARD A
+JOIN USED_GOODS_USER  B
+ON A.writer_id = B.user_id
+WHERE A.STATUS = 'DONE'
+GROUP BY user_id
+HAVING TOTAL_SALES >= 700000
+ORDER BY total_sales
+
+# status done => price 70만 이상 =>  id, 닉네임, 총 거래금액
