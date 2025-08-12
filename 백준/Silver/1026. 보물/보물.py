@@ -1,0 +1,6 @@
+n = int(input())
+arr = list(map(int, input().split()))
+arr2 = list(map(int, input().split()))
+arr.sort(reverse=True)
+arr2.sort()
+print(sum((arr[i] * arr2[i]) for i in range(n)))
