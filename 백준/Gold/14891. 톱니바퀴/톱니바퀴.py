@@ -1,41 +1,34 @@
 from collections import deque
 
-def check_right(g, direction):
-    global Dir
-    if g > 3 or gear[g-1][2] == gear[g][6]:
+arr1 = deque(['-1'] * 8)
+
+
+arr =  [deque(['-1']*8)] + [deque(list(input())) for _ in range(4)] + [deque(['-1']*8)]
+k = int(input())
+
+
+def rotate(gear, cir, prev=None):
+    # 종료 조건
+    if gear == 0 or gear == 5:
         return
 
-    if gear[g-1][2] != gear[g][6]:
-        # 돌릴 때 움직이려면 방향이 반대여야 함
-        check_right(g + 1, -direction)
-        # 돌린다음에 체크
-        gear[g].rotate(direction)
-
-def check_left(g, direction):
-    global Dir
-    if g < 0 or gear[g][2] == gear[g+1][6]:
-        return
-
-    if gear[g][2] != gear[g+1][6]:
-        check_left(g - 1, -direction)
-        gear[g].rotate(direction)
+    # 9시 방향 : 6, 3시 방향 : 2
+    # 왼쪽 판단
+    if prev != gear - 1 and arr[gear][6] != arr[gear-1][2]: # if N - S:
+        # next gear -> move
+        rotate(gear -1, -cir, gear)
 
 
-gear = [deque(list(map(int, input()))) for _ in range(4)]
-N = int(input())
+    # 오른쪽  판단
+    if prev != gear + 1 and arr[gear][2] != arr[gear + 1][6]:
+        rotate(gear + 1, -cir, gear)
 
-# dir 체크
-for _ in range(N):
-    G, direction = map(int, input().split())
-    g = G-1
-    check_right(g+1, -direction)
-    check_left(g-1, -direction)
-    # 돌린다음에 체크하면 안되니까 돌리기전에 체크, 그리고 마지막에 돌리기
-    gear[g].rotate(direction)
+    # current gear -> cir directional rev -> only first
+    arr[gear].rotate(cir)
 
-ans = 0
-for i in range(4):
-    # print(gear[i])
-    if gear[i][0] == 1:
-        ans += 2**i
-print(ans)
+for _ in range(k):
+    gear, cir = map(int, input().split())
+    # rotate
+    rotate(gear, cir)
+
+print(sum(2**(k -1) if arr[k][0] == '1' else 0 for k in range(1, 5)))
