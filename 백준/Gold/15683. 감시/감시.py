@@ -1,54 +1,66 @@
-
-def cal(tlst):
-    v = [[0] * m for _ in range(n)]
-    for k in range(len(tlst)):
-        rot = tlst[k]
-        si, sj = lst[k]
-        cur_cctv = cctv[arr[si][sj]]
-
-        for cur_dir in cur_cctv:
-            next_dir = (cur_dir + rot) % 4
-
-            ni, nj = si, sj
-            while True:
-                ni, nj = ni + dir[next_dir][0], nj + dir[next_dir][1]
-                # 범위내
-                if 0 <= ni < n and 0 <= nj < m:
-                    if arr[ni][nj] == 6:
-                        break
-                    v[ni][nj] = 1
-
-                else:
-                    break
-
-
-    ans = sum(1 for j in range(m) for i in range(n) if not arr[i][j] and not v[i][j])
-    return ans
-
-def dfs(index, tlst):
-    global ans
-    # 종료 조건
-    if index == len(lst):
-        ans = min(ans, cal(tlst))
-        return
-
-    # dfs
-    dfs(index + 1, tlst + [0])  #   0도 회전
-    dfs(index + 1, tlst + [1])  #  90도 회전
-    dfs(index + 1, tlst + [2])  # 180도 회전
-    dfs(index + 1, tlst + [3])  # 270도 회전
-
-# input
 n, m = map(int, input().split())
 arr = [list(map(int, input().split())) for _ in range(n)]
+ans = float("inf")
 
-# init
-ans = m * n
-dir = ((-1, 0), (0, 1), (1, 0), (0, -1))    # 0상 1우 2하 3좌
-cctv = [[], [1], [1, 3], [0, 1], [0, 1, 3], [0, 1, 2, 3]]
-rot = [0, 1, 2, 3]  # 0도, 90도, 180도, 270도
-lst = [(i, j ) for j in range(m) for i in range(n) if 0 < arr[i][j] < 6]
+# 1~5 CCTV 방향 설정
+cctv_dir = [[],
+            [[(0, 1)], [(0, -1)], [(1, 0)], [(-1, 0)]], # 1
+            [[(1, 0), (-1, 0)], [(0, -1), (0, 1)], [(1, 0), (-1, 0)], [(0, -1), (0, 1)]], # 2
+            [[(-1, 0), (0, 1)], [(-1, 0), (0, -1)], [(1, 0), (0, 1)], [(1, 0), (0, -1)]], # 3
+            [[(-1, 0), (0, -1), (0, 1)], [(1, 0), (0, -1), (0, 1)], [(1, 0), (-1, 0), (0, 1)], [(1, 0), (-1, 0), (0, -1)]], # 4
+            [[(1, 0), (-1, 0), (0, -1), (0, 1)], [(1, 0), (-1, 0), (0, -1), (0, 1)], [(1, 0), (-1, 0), (0, -1), (0, 1)] ,[(1, 0), (-1, 0), (0, -1), (0, 1)]]  # 5
+            ]
 
-# main loop
-dfs(0, [])  # index, temp_list
+
+# cctv list 갱신
+cctv_lst  = []
+for i in range(n):
+    for j in range(m):
+        if 1 <= arr[i][j] <= 5:
+            cctv_lst.append((i, j, arr[i][j]))
+
+
+def dfs(idx, rotate, arr):
+    global ans
+    # 4방향 탐색
+
+    if idx == len(cctv_lst):
+        # pprint(arr)
+        cnt = 0
+        for i in range(n):
+            for j in  range(m):
+                if arr[i][j] == 0:
+                    cnt += 1
+        ans = min(cnt, ans)
+        return
+
+    # BFS 돌리기
+    new_arr = [row[:] for row in arr]
+
+
+    ci, cj, cur_cctv = cctv_lst[idx]
+    # 현재 cctv direction
+    cur_cctv_dir = cctv_dir[cur_cctv]
+
+    for di, dj in cur_cctv_dir[rotate]:
+        k = 1
+        while True:
+            ni, nj = ci + di * k, cj + dj * k
+
+            if 0 <= ni < n and 0 <= nj < m and arr[ni][nj] != 6:
+                new_arr[ni][nj] = -1 # -1 은 확인한 거리
+                k += 1
+            else:
+                 break
+
+    # pprint(new_arr)
+    # 다시 idx + 1 로 dfs 돌리기
+    for rot in range(4):
+        dfs(idx + 1, rot, new_arr)
+
+
+for i in range(4):
+    dfs(0, i, arr)
+
+
 print(ans)
