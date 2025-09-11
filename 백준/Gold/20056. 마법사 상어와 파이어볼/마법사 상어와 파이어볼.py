@@ -1,67 +1,96 @@
-from copy import deepcopy
-
-# init
-n, m, k = map(int, input().split())
-dir = ((-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1))
+n, m, K = map(int, input().split())
+fireballs = [list(map(int, input().split())) for _ in range(m)]
+# r, c, m, s, d
+# i, j, 질량, 방향, 속력
+# r, c 가 지금 1,1 시작 이라 -1씩 해줘야 함
+# 0 -> N과 연결 % n 하면 될 듯
+# odd, even -> 방향을 기준으로
 arr = [[[] for _ in range(n)] for _ in range(n)]
-for _ in range(m):
-    i, j, m, s, d = map(int, input().split())
-    arr[i-1][j-1].append((m, s, d))
 
-for _ in range(k):
-    # move
+# dir
+dir = [(-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)]
+
+for i, j, m, s, d in fireballs:
+    arr[i-1][j-1].append([m, s, d])
+
+
+
+time = 0
+while time < K:
     # pprint(arr)
+    # print("time:", time, ", k:", K)
+    # 복사 배열
+    new_arr = [[[] for _ in range(n)] for _ in range(n)]
 
-    # 1 step
-    next_arr = [[[] for _ in range(n)] for _ in range(n)]
+    # print("현재")
+    # pprint(arr)
+    # 볼 이동
     for i in range(n):
         for j in range(n):
-            if arr[i][j]: # fireball, it is
-                for k in range(len(arr[i][j])):
-                    # [0]: 질량, [1]: 방향, [2]: 속력
-                    m, s, d = arr[i][j][k]
-                    ni, nj = (i + dir[d][0] * s) % n, (j + dir[d][1] * s) % n
-                    next_arr[ni][nj].append((m, s, d))
-    # 만약 겹치면
+            if arr[i][j]:
+                # 질량, 속력,  방향
+                for m, s, d in arr[i][j]:
+                    ni = (i + dir[d][0] * s + n) % n
+                    nj = (j + dir[d][1] * s + n) % n
+
+
+                    # 갱신
+                    new_arr[ni][nj].append((m, s, d))
+
+    # print("갱신")
+    # pprint(new_arr)
+    # 순회 돌면서 2개 이상 찾기
     for i in range(n):
         for j in range(n):
-            if len(next_arr[i][j]) > 1:
-                # pop 하고 [] 갱신
-                targets = next_arr[i][j]
-                next_arr[i][j] = []
+            if len(new_arr[i][j]) > 1: # 2 이상일 때
+                even, odd = 0, 0
+                odd_flag = 0
 
-                new_m = sum(row[0] for row in targets) // 5
-                # 질량 // 5 > 0
-                if new_m > 0:
-                    new_s = sum(row[1] for row in targets) // len(targets)
+                # [0]: 질량, [1]: 속력, [2]: 방향
+                for target in new_arr[i][j]:
 
-                    # 방향 설정
-                    one, two = 0, 0 # 홀, 짝
-                    for target in targets:
-                        if target[2] % 2 == 1: # 홀수라면?
-                            one += 1
-                        else: two += 1
-
-                    if len(targets) == one or len(targets) == two:
-                        # 0, 2, 4, 6 설정
-                        for k in (0, 2, 4, 6): # 나뉘지만, 움직이지 않음
-                            next_arr[i][j].append((new_m, new_s, k))
-
-
+                    # 방향을 기준
+                    if  target[2] % 2 == 0:
+                        even += 1
                     else:
-                        for k in (1, 3, 5, 7): # 나뉘지만, 움직이지 않음
-                            next_arr[i][j].append((new_m, new_s, k))
+                        odd += 1
 
-    # pprint(next_arr)
-    # 갱신
-    arr = next_arr
+                # even or odd 일 때
+                if even == 0 or odd == 0:
+                    odd_flag = 0
 
-# 남아있는 합계
+                else:
+                    odd_flag = 1
+
+                # m, s 갱신
+                next_m, next_s = 0, 0
+                for m, s, d in new_arr[i][j]:
+                    next_m += m
+                    next_s += s
+
+                next_m = next_m // 5
+                next_s = next_s // len(new_arr[i][j])
+
+                # 초기화 후 next_m 이 0보다 크면 4개 쪼개서 넣기
+                new_arr[i][j] = []
+
+                if next_m > 0:
+                    for k in range(4):                    # m, d, s
+                        new_arr[i][j].append((next_m, next_s,  2 * k + odd_flag))
+
+
+    # pprint(new_arr)
+
+    # time + 1
+    time += 1
+    arr = new_arr
+
+
 ans = 0
 for i in range(n):
     for j in range(n):
         if arr[i][j]:
-            for k in range(len(arr[i][j])):
-                ans += arr[i][j][k][0]
+            for tar in arr[i][j]:
+                ans += tar[0]
 
 print(ans)
