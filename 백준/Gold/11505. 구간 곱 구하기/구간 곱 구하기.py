@@ -1,71 +1,58 @@
 MOD = 1000000007
 
-class SegTree():
+class SegTree:
     def __init__(self, arr):
         self.n = len(arr)
         self.arr = arr
-        self.tree = [0] * (4 * self.n)
-        self._build(1, 0, self.n - 1)
+        size = 1
+        # size 키우기
+        while size < self.n:
+            size *= 2
 
-    def _build(self, node, l, r):
-        if l == r:
-            self.tree[node] = self.arr[l]
-            return
+        self.size = size
+        self.tree = [1] * (2 * size)
 
-        mid = (l + r) // 2
-        self._build(node * 2, l, mid)
-        self._build(node * 2 + 1, mid + 1, r)
+        # 리프 채우기
+        for i in range(self.n):
+            self.tree[size + i] = arr[i] % MOD
 
-        self.tree[node] = self.tree[node * 2] * self.tree[node * 2 + 1] % MOD
-
-    def query(self, ql, qr):
-        if ql > qr: return 1
-        return self._query(1, 0, self.n - 1, ql, qr)
-
-    def _query(self, node, l, r, ql, qr):
-        # 범위 밖
-        if ql > r or qr < l:
-            return 1
-
-        # 범위 내
-        if ql <= l and r <= qr:
-            return self.tree[node]
-
-        # 일부 포함 이라면
-        mid = (r + l) // 2
-        left_sum = self._query(2 * node, l, mid, ql, qr)
-        right_sum = self._query(2 * node + 1, mid +1, r, ql, qr)
-        return left_sum * right_sum % MOD
-
-
+        # 바텀업 빌드
+        for i in range(size - 1, 0, -1):
+            self.tree[i] = (self.tree[i * 2] * self.tree[i * 2 + 1]) % MOD
 
     def update(self, idx, val):
-        return self._update(1, 0, self.n - 1, idx, val)
+        p = self.size + idx
+        self.tree[p] = val % MOD
+        p = p // 2
+        while p:
+            self.tree[p] = (self.tree[p * 2] * self.tree[p * 2 + 1]) % MOD
+            p //= 2
 
-    def _update(self, node, l , r, idx, val):
-        if l == r:
-            self.tree[node] = val
-            return
+    def query(self, l ,r):
+        l += self.size
+        r += self.size
+        res = 1
+        while l <= r:
+            if l % 2 == 1:
+                res = (res * self.tree[l]) % MOD
+                l += 1
 
-        # 찾아가기
-        mid = (l  + r ) // 2
-        if  idx <= mid:
-            self._update(node * 2, l, mid, idx, val)
+            if r % 2 ==0:
+                res = (res * self.tree[r]) % MOD
+                r -= 1
 
-        else:
-            self._update(node * 2 + 1, mid + 1, r , idx, val)
+            l = l // 2
+            r = r // 2
 
-
-        # 트리 갱신
-        self.tree[node] = self.tree[node * 2] * self.tree[node * 2 + 1] % MOD
-
+        return res
 
 n, m, k = map(int, input().split())
 arr = [int(input()) for _ in range(n)]
 st = SegTree(arr)
 for _ in range(m + k):
-    a, b, c = map(int, input().split())
+    a, b, c, = map(int, input().split())
     if a == 1:
         st.update(b -1, c)
+
     else:
-        print(st.query(b - 1, c - 1))
+        print(st.query(b -1, c - 1))
