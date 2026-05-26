@@ -1,20 +1,20 @@
 from collections import deque
-
 def solution(s):
-    q = deque()
+    answer = True
+    dq = deque()
+    
     
     for i in s:
         if i == "(":
-            q.append(i)
+            dq.append(i)
         
         else:
-            if len(q):
-                q.pop()
+            if dq:
+                dq.pop()
             
             else:
                 return False
-
-    if len(q):
+            
+    if dq:
         return False
-    else:
-        return True
+    return True
